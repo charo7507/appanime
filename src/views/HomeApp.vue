@@ -1,17 +1,65 @@
-
-
 <template>
-  <div class="app">
-   <router-view />
+  <div class="homme">
+    <header>
+      <h1 class="title">ANIME SHAPERS</h1>
+      <form action="" class="search__form" 
+      @submit.prevent="HandeSearch"
+      >
+        <input type="search" class="form__input" placeholder="Search anime..." 
+        required
+        v-model="animeName">
+      </form>
+
+      
+    </header>
+
+    <main>
+      <div class="cards">
+        <AllAnime 
+        v-for="(anime, i) in animeList" 
+        :key="i"
+        :anime="anime"
+         />
+      </div>
+    </main>
   </div>
 </template>
 
 <script setup>
+import AllAnime from '../components/AllAnime.vue'
+// import axios from 'axios'
+  import {
+    ref
+  } from 'vue'
 
+  const animeName = ref('')
+  const animeList = ref([])
+
+  // const HandeSearch =() =>{
+  //   axios
+  //   .get(`https://api.jikan.moe/v4/anime?q=${animeName.value}`)
+  //   .then((res) =>{
+  //     const {
+  //       data
+  //     } = res
+
+  //     // console.log(res);
+  //     console.log(data.data);
+  
+  //   })
+  // }
+
+  const HandeSearch = async () =>{
+    animeList.value = await fetch(`https://api.jikan.moe/v4/anime?q=${animeName.value}`)
+    .then(res => res.json())
+    .then(data => data.data)
+
+    console.log(animeList.value);
+  }
 </script>
 
 <style lang="scss">
-  .app {
+  .homme {
     * {
       padding: 0;
       margin: 0;
